@@ -11,37 +11,42 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class FolderService implements IFolderService{
+public class FolderService implements IFolderService {
 
     private IFolderRepository repository;
+    private ITaskService taskService;
 
     @Autowired
-    public FolderService(IFolderRepository repository){
-        this.repository=repository;
+    public FolderService(IFolderRepository repository, ITaskService taskService) {
+
+        this.repository = repository;
+        this.taskService = taskService;
     }
 
     @Override
-    public void create(Folder folder) throws Exception {
-        if(folder!=null){
-            repository.save(folder);
-        }else throw new Exception("Cannot create folder");
+    public Folder create(Folder folder) throws Exception {
+        if (folder != null) {
+            return repository.save(folder);
+
+        } else throw new Exception("Cannot create folder");
     }
 
 
     @Override
     public void delete(Integer id) throws Exception {
-        Folder folder= repository.getById(id);
-        if (folder!=null){
+        Folder folder = repository.getById(id);
+        if (folder != null) {
             repository.delete(folder);
-        }else throw new Exception("Cannot delete folder");
+        } else throw new Exception("Cannot delete folder");
     }
 
     @Override
     public Folder getById(Integer id) throws Exception {
         Folder folder = repository.getById(id);
-        if(folder!=null){
+        if (folder != null) {
             return folder;
-        }else throw new Exception("Cannot find folder");
+
+        } else throw new Exception("Cannot find folder");
 
 
     }
@@ -51,4 +56,15 @@ public class FolderService implements IFolderService{
 
         return repository.findAll();
     }
-}
+
+    @Override
+    public void addTaskInFolder(Integer id,Task task) throws Exception {
+        Folder folder = repository.getById(id);
+        if (folder != null) {
+            folder.getTasks().add(task);
+            repository.save(folder);
+
+        } else throw new Exception("Cannot create task in this folder");
+    }
+    }
+
