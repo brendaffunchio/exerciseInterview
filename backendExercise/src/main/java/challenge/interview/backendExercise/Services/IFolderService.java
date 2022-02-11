@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface IFolderService {
 
-    void create(Folder folder);
-    void delete(Integer id);
-    Folder getById(Integer id);
+    void create(Folder folder) throws Exception;
+    void delete(Integer id) throws Exception;
+    Folder getById(Integer id) throws Exception;
     List<Folder> getList();
 }

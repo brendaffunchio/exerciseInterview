@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface ITaskService {
 
-    void create(Task task);
-    void edit(Task task);
-    void delete(Integer id);
-    Task getById(Integer id);
+    void create(Task task) throws Exception;
+    void edit(Task task) throws Exception;
+    void delete(Integer id) throws Exception;
+    Task getById(Integer id) throws Exception;
     List<Task> getList();
     List<Task> findByIdFolder(Integer id);
-    
+
 }
