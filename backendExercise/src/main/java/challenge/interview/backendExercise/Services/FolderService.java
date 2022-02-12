@@ -13,15 +13,11 @@ import java.util.List;
 @Service
 public class FolderService implements IFolderService {
 
+    @Autowired
     private IFolderRepository repository;
+    @Autowired
     private ITaskService taskService;
 
-    @Autowired
-    public FolderService(IFolderRepository repository, ITaskService taskService) {
-
-        this.repository = repository;
-        this.taskService = taskService;
-    }
 
     @Override
     public Folder create(Folder folder) throws Exception {
@@ -33,16 +29,23 @@ public class FolderService implements IFolderService {
 
 
     @Override
-    public void delete(Integer id) throws Exception {
+    public Boolean delete(Integer id) throws Exception {
         Folder folder = repository.getById(id);
+
         if (folder != null) {
+            for (Task task: taskService.getByIdFolder(id)
+            ) {
+                taskService.delete(task.getId());
+
+            }
             repository.delete(folder);
-        } else throw new Exception("Cannot delete folder");
+            return true;
+        } else return false;
     }
 
     @Override
     public Folder getById(Integer id) throws Exception {
-        Folder folder = repository.getById(id);
+        Folder folder = repository.findById(id).get();
         if (folder != null) {
             return folder;
 
@@ -57,14 +60,6 @@ public class FolderService implements IFolderService {
         return repository.findAll();
     }
 
-    @Override
-    public void addTaskInFolder(Integer id,Task task) throws Exception {
-        Folder folder = repository.getById(id);
-        if (folder != null) {
-            folder.getTasks().add(task);
-            repository.save(folder);
 
-        } else throw new Exception("Cannot create task in this folder");
-    }
     }
 

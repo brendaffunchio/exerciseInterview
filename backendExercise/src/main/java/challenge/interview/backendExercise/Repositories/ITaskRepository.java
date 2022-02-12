@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface ITaskRepository extends JpaRepository<Task, Integer> {
 
-    @Query("SELECT * FROM TASK WHERE idFolder.id = :id")
-    List<Task> findByIdFolder(Integer id);
+    @Query(value="SELECT * FROM TASK WHERE folder_id = :id", nativeQuery = true)
+    List<Task> findByFolder_id(Integer id);
 
 }

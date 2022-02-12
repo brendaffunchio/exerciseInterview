@@ -9,6 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name="FOLDER")
 public class Folder {
 
     @Id
@@ -16,8 +17,8 @@ public class Folder {
     private Integer id;
     @Column(nullable = false)
     private String name;
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Task> tasks;
+ /*   @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> tasks;*/
 
 
 }

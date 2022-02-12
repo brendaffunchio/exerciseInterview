@@ -11,14 +11,10 @@ import java.util.List;
 @RequestMapping("/folder")
 public class FolderController {
 
+    @Autowired
     private IFolderService service;
 
-    @Autowired
-    public FolderController(IFolderService service) {
-        this.service = service;
-    }
-
-    @PostMapping(path = "/create",consumes = "application/json",produces = "application/json")
+    @PostMapping(path = "/create")
     public Folder addfolder(@RequestBody Folder folder) throws Exception {
         try {
             return service.create(folder);
@@ -27,27 +23,28 @@ public class FolderController {
         }
     }
 
-    @DeleteMapping(path = "/delete",consumes = "application/json",produces = "application/json")
-    public String deleteFolder(@RequestBody Integer id) throws Exception {
-        try {
-            service.delete(id);
-            return ("Folder deleted");
-        } catch (Exception e) {
-            return e.getMessage();
-        }
+    @DeleteMapping(path = "/delete")
+    public String deleteFolder(@RequestParam("id") Integer id) throws Exception {
+
+        Boolean result = service.delete(id);
+
+        if (result) {
+            return "Folder deleted";
+        } else return "Cannot delete folder";
     }
 
-    @GetMapping (path="/get", consumes = "application/json",produces = "application/json" )
-    public Folder getFolder(@RequestBody Integer id)throws Exception{
+    @GetMapping(path = "/get")
+    public Folder getFolder(@RequestParam("id") Integer id) throws Exception {
 
-        try{
+        try {
             return service.getById(id);
-        }catch(Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
-    @GetMapping(path="/getAll",produces = "application/json")
-    public List<Folder> getAllFolders(){
+
+    @GetMapping(path = "/getAll")
+    public List<Folder> getAllFolders() {
 
         return service.getList();
     }

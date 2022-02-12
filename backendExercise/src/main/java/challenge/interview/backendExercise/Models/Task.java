@@ -8,6 +8,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name="TASK")
 public class Task {
 
     @Id
@@ -17,8 +18,7 @@ public class Task {
     private String description;
     private Boolean finished;
     @ManyToOne()
-    @Column(nullable = true)
-    @JoinColumn(name = "idFolder")
+    @JoinColumn(name = "folder_id", nullable = true)
     private Folder folder;
 
 }

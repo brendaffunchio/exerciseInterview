@@ -2,6 +2,7 @@ package challenge.interview.backendExercise.Services;
 
 import challenge.interview.backendExercise.Models.Folder;
 import challenge.interview.backendExercise.Models.Task;
+import challenge.interview.backendExercise.Repositories.IFolderRepository;
 import challenge.interview.backendExercise.Repositories.ITaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,25 +12,23 @@ import java.util.List;
 @Service
 public class TaskService implements ITaskService {
 
-    private ITaskRepository repository;
-    private IFolderService folderService;
-
     @Autowired
-    public TaskService(ITaskRepository repository, IFolderService folderService) {
-        this.repository = repository;
-        this.folderService=folderService;
-    }
+    private ITaskRepository repository;
+    @Autowired
+    private IFolderRepository folderRepository;
 
     @Override
-    public Task create(Integer id, Task task) throws Exception {
+    public Task create(Task task,Integer id) throws Exception {
+        Task newTask = null;
+           if (task != null) {
+           addTaskInFolder(task,id);
+           newTask = repository.save(task);
 
-        if (task != null) {
-            return repository.save(task);
-           // if(id!=null) folderService.addTaskInFolder(id,task);
+        } else throw new Exception("Cannot create task");
 
-            }else throw new Exception("Cannot create task");
+           return newTask;
+        }
 
-    }
 
     @Override
     public Task edit(Task task) throws Exception {
@@ -39,7 +38,6 @@ public class TaskService implements ITaskService {
         if (oldTask != null) {
             oldTask.setDescription(task.getDescription());
             oldTask.setFinished(task.getFinished());
-            oldTask.setFolder(task.getFolder());
             return repository.save(oldTask);
 
         } else throw new Exception("Cannot edit task");
@@ -55,7 +53,7 @@ public class TaskService implements ITaskService {
 
     @Override
     public Task getById(Integer id) throws Exception {
-        Task task = repository.getById(id);
+        Task task = repository.findById(id).get();
         if (task != null) {
             return task;
         } else throw new Exception("Cannot find task");
@@ -69,10 +67,17 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public List<Task> findByIdFolder(Integer id) {
+    public List<Task> getByIdFolder(Integer id) {
 
-        return repository.findByIdFolder(id);
+        return repository.findByFolder_id(id);
     }
+    @Override
+    public void addTaskInFolder(Task task,Integer id){
+        Folder folder1 = folderRepository.getById(id);
+        task.setFolder(folder1);
 
+
+
+    }
 
 }

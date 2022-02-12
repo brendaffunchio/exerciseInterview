@@ -3,7 +3,11 @@ package challenge.interview.backendExercise.Controllers;
 import challenge.interview.backendExercise.Models.Folder;
 import challenge.interview.backendExercise.Models.Task;
 import challenge.interview.backendExercise.Services.ITaskService;
+import org.apache.tomcat.util.http.parser.MediaType;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,34 +16,29 @@ import java.util.List;
 @RequestMapping("/task")
 public class TaskController {
 
-private ITaskService service;
-
-@Autowired
-    public TaskController(ITaskService service){
-    this.service=service;
-}
+    @Autowired
+    private ITaskService service;
 
 
-    @PostMapping(path="/create", consumes = "application/json",produces = "application/json")
-    public Task createTask(@RequestBody Integer id, @RequestBody Task task) throws Exception{
+    @PostMapping(path = "/create")
+    public Task createTask(@RequestBody @NotNull Task task, @RequestParam ("id_folder") Integer id_folder) throws Exception {
 
-        try {
-            return service.create(id,task);
-        }catch(Exception e){
-            return null;
-        }
+      return service.create(task,id_folder);
+
     }
-    @PutMapping(path="/edit", consumes = "application/json",produces = "application/json")
-    public Task editTask(@RequestBody Task task) throws Exception{
+
+    @PutMapping(path = "/edit")
+    public Task editTask(@RequestBody Task task) throws Exception {
 
         try {
             return service.edit(task);
-        }catch(Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
-    @DeleteMapping(path = "/delete",consumes = "application/json",produces = "application/json")
-    public String deleteTask(@RequestBody Integer id) throws Exception {
+
+    @DeleteMapping(path = "/delete")
+    public String deleteTask(@RequestParam ("id") Integer id) throws Exception {
         try {
             service.delete(id);
             return ("Task deleted");
@@ -47,19 +46,27 @@ private ITaskService service;
             return e.getMessage();
         }
     }
-    @GetMapping (path="/get", consumes = "application/json",produces = "application/json" )
-    public Task getTask(@RequestBody Integer id)throws Exception{
 
-        try{
+    @GetMapping(path = "/get")
+    public Task getTask(@RequestParam ("id")  Integer id) throws Exception {
+
+        try {
             return service.getById(id);
-        }catch(Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
-    @GetMapping(path="/getAll",produces = "application/json")
-    public List<Task> getAllFolders(){
+
+    @GetMapping(path = "/getAll")
+    public List<Task> getAllTasks() {
 
         return service.getList();
+    }
+
+    @GetMapping(path = "/getByFolder")
+    public List<Task> getAllTasksByFolderId(@RequestParam ("folder_id")Integer folder_id) {
+
+        return service.getByIdFolder(folder_id);
     }
 
 }
