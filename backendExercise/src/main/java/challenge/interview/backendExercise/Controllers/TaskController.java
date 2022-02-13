@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpRequest;
 import java.util.List;
 
 @RestController
@@ -21,13 +22,13 @@ public class TaskController {
 
 
     @PostMapping(path = "/create")
-    public Task createTask(@RequestBody @NotNull Task task, @RequestParam ("id_folder") Integer id_folder) throws Exception {
+    public Task createTask(@RequestBody @NotNull Task task, @RequestParam (value = "id_folder", required = false) Integer id_folder) throws Exception {
 
       return service.create(task,id_folder);
 
     }
 
-    @PutMapping(path = "/edit")
+    @PutMapping(path = "/edit", consumes="application/json", produces="application/json")
     public Task editTask(@RequestBody Task task) throws Exception {
 
         try {

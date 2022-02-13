@@ -15,7 +15,7 @@ function App() {
       
       <Routes>
       <Route exact='true' path="/" element={<Tasks />}></Route>
-      <Route exact='true' path="/edit/:id" element={<EditTask/>}>
+      <Route exact='true' path="/edit/:idTask" element={<EditTask/>}>
       </Route>
       <Route exact='true' path="/Folders/:id" element={<FolderWithTasks />}></Route>
       <Route path="/Folders" element={<Folders />}></Route>

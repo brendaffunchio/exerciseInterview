@@ -37,7 +37,6 @@ public class TaskService implements ITaskService {
 
         if (oldTask != null) {
             oldTask.setDescription(task.getDescription());
-            oldTask.setFinished(task.getFinished());
             return repository.save(oldTask);
 
         } else throw new Exception("Cannot edit task");
@@ -73,9 +72,10 @@ public class TaskService implements ITaskService {
     }
     @Override
     public void addTaskInFolder(Task task,Integer id){
-        Folder folder1 = folderRepository.getById(id);
-        task.setFolder(folder1);
-
+        if(id!=null) {
+            Folder folder1 = folderRepository.getById(id);
+            task.setFolder(folder1);
+        }
 
 
     }

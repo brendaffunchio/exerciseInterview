@@ -12,13 +12,15 @@ import{
 
 const EditTask =()=>{
 
-    const {id} = useParams()
+    const {idTask} = useParams()
     const[task,setTask]= React.useState([])
     const [editTask, setEditTask]= React.useState({
-       description:""
+       description:"",
+       finished:false,
+       id:idTask
     })
 
-  const {description} = editTask;
+  const {description,finished,id} = editTask;
 
 React.useEffect(()=>{
 
@@ -28,7 +30,7 @@ getTask();
 
 const getTask = async ()=>{
     
-   const data = await fetch(`http://localhost:8080/task/get?id=${id}`);
+   const data = await fetch(`http://localhost:8080/task/get?id=${idTask}`);
   
    const dataTask= await data.json();
    setTask(dataTask)
@@ -47,8 +49,7 @@ const handleInputChange =(event)=>{
 const sendData = async (event) =>{
 
 event.preventDefault();
-const body = {description};
-
+const body = {description,finished,id};
 
            await axios({
             method: 'post', 
@@ -81,11 +82,13 @@ return (
          name="description"
          onChange={event=>handleInputChange(event)}
             /> 
+        
     </div>
-    <div className='col-md-3'>
-   <button type="submit" onClick={sendData}>Save</button>
+   
+       <div className='col-md-2'>
+   <button type="submit" onSubmit={sendData}>Save</button>
     </div>
-    <div className='col-md-3'>
+    <div className='col-md-2'>
      <Link to="/" class="btn">Cancel</Link>
     </div>
 </form>

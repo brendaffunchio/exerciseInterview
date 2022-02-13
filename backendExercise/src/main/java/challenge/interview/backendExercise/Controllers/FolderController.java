@@ -14,7 +14,7 @@ public class FolderController {
     @Autowired
     private IFolderService service;
 
-    @PostMapping(path = "/create")
+    @PostMapping(path = "/create",consumes="application/json", produces="application/json")
     public Folder addfolder(@RequestBody Folder folder) throws Exception {
         try {
             return service.create(folder);
