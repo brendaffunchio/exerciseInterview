@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect,Fragment,UseState} from 'react';
 import{
     BrowserRouter as Router,
     Switch,
@@ -10,7 +10,10 @@ import{
 
 const Tasks =()=>{
 
-    const[tasks,setTasks]= React.useState([])
+    const[tasks,setTasks]= React.useState([]);
+    const[newTask,setNewTask]=React.useState({
+        description:''
+    });
 
 React.useEffect(()=>{
 
@@ -26,25 +29,78 @@ const getTasks = async ()=>{
    setTasks(dataTasks)
    
 }
+
+const handleInputChange =(event)=>{
+
+    setNewTask({
+        ...newTask,
+        [event.target.name]: event.target.value
+    })
+
+}
+
+const sendData = async (event) =>{
+event.preventDefault();
+const body = { description };
+            const response = await fetch(`http://localhost:8080/task/create?id_folder=${id}`, {
+                method: 'POST',
+               headers: { "Content-type": "application/json"} ,
+                body: JSON.stringify(body)
+            });
+
+            event.target.reset();
+
+    }
 return (
    
 <div>
  
-       <h3>To-do List</h3>
+       <h4 class="m-3">To-do List</h4>
    
-    <ul>
+ 
         {
             tasks.map(item =>(
-                <li key={item.id}>
-                   
-                    {item.description}
-                    <Link to={`/edit/${item.id}`} class="m-3">
+               
+                <p key={item.id}>
+                    <div class="container">
+                    <div class="row justify-content-md-left">
+                     <div class="col col-lg-2">
+                      
+                 <input type="checkbox" value="true"/> {item.description}
+                                 
+                    
+                    </div>
+                    <div class="col-md-auto">
+                  <Link to={`/edit/${item.id}`}>
                      Edit
-                    </Link>
-                    </li>
+                    </Link></div>
+                    </div>
+                    </div>
+                    </p>
+                  
+                   
             ))
         }
-    </ul>
+   <Fragment>
+
+<form className="row mb-3" onSubmit={sendData}>
+
+    <div className='col-md-3'>
+     <input
+         placceholder="New Task"
+         className="form-control"
+         type="text"
+         name="description"
+         onChange={handleInputChange}
+            /> 
+    </div>
+    <div className='col-md-3'>
+     <button type="submit" onSubmit={sendData}>Add</button>
+    </div>
+</form>
+
+</Fragment>
+
 </div>
 )
 

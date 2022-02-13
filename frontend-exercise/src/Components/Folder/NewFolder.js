@@ -19,7 +19,6 @@ const NewFolder = () => {
 
 event.preventDefault();
 
-const body = { name };
             const response = await fetch(`http://localhost:8080/task/create?id_folder=${id}`, {
                 method: "POST",
                 headers: { "Content-type": "application/json" },
@@ -30,7 +29,7 @@ const body = { name };
     return (
 <Fragment>
 
-<form classname="row" onSubmit={sendData}>
+<form className="row mb-3" onSubmit={sendData}>
 
     <div className='col-md-3'>
      <input
@@ -39,7 +38,8 @@ const body = { name };
          type="text"
          name="name"
          onChange={handleInputChange}
-             >  </input>
+             /> 
+
     </div>
     <div className='col-md-3'>
      <button type="submit">Add</button>

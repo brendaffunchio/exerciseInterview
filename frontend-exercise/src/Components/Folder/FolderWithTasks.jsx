@@ -1,14 +1,6 @@
-import { cleanup } from '@testing-library/react';
-import React, {useEffect,Fragment,UseState} from 'react'
-import{
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    NavLink,
-    Link
-  
-  } from "react-router-dom";
-  import { useParams } from 'react-router-dom';
+import React, {useEffect,Fragment,UseState} from 'react';
+import{Link} from "react-router-dom";
+import { useParams } from 'react-router-dom';
   
 
 const FolderWithTasks =()=>{
@@ -16,11 +8,12 @@ const FolderWithTasks =()=>{
     const {id} = useParams();
     const[folderTasks,setFolderTasks]= React.useState([]);
     const[folder,setFolder]=React.useState([]);
-    const [newFolder,setNewFolder] = useState({
-        name:''
+    
+    const [task,setTask] = React.useState({
+        description:''
     });
 
-React.useEffect(()=>{
+useEffect(()=>{
 getFolder();
 getFolderTasks();
 
@@ -47,58 +40,70 @@ const getFolder = async()=>{
 
 const handleInputChange =(event)=>{
 
-    setNewFolder({
-        ...newFolder,
+    setTask({
+        ...task,
         [event.target.name]: event.target.value
     })
 
 }
 
-const sendData =(event) =>{
+const sendData = async (event) =>{
 
 event.preventDefault();
-const body = { name };
+const body = { description };
             const response = await fetch(`http://localhost:8080/task/create?id_folder=${id}`, {
-                method: "POST",
-                headers: { "Content-type": "application/json" },
+                method: 'POST',
+               headers: { "Content-type": "application/json" },
                 body: JSON.stringify(body)
             });
+
+            event.target.reset();
 
     }
 
 return (
    
 <div>
- <h2>{folder.name}</h2>
-    <ul>
+ <h4 class="m-3">{folder.name}</h4>
+  
         {
             folderTasks.map(item =>(
-                <li key={item.id}>
-                   
-                    {item.description}
-                    <Link to={`/edit/${item.id}`} class="m-3">
-                     Edit
-                    </Link>
-                    </li>
+                <p key={item.id}>
+                <div class="container">
+                <div class="row justify-content-md-left">
+                 <div class="col col-lg-2">
+                  
+             <input type="checkbox" value="true"/> {item.description}
+                             
+                
+                </div>
+                <div class="col-md-auto">
+              <Link to={`/edit/${item.id}`}>
+                 Edit
+                </Link></div>
+                </div>
+                </div>
+                </p>
+              
             ))
         }
-    </ul>
+   
 
     <Fragment>
 
-<form classname="row" onSubmit={sendData}>
+<form className="row mb-3" onSubmit={sendData}>
 
     <div className='col-md-3'>
      <input
          placceholder="New Task"
          className="form-control"
          type="text"
-         name="name"
+         name="description"
          onChange={handleInputChange}
-             >  </input>
+            /> 
     </div>
     <div className='col-md-3'>
-     <button type="submit">Add</button>
+     <button type="submit" onSubmit={sendData}>Add</button>
     </div>
 </form>
 

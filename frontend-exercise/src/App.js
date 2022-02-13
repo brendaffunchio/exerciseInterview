@@ -9,19 +9,21 @@ import FolderWithTasks from './Components/Folder/FolderWithTasks';
 
 function App() {
   return (
+    <div class="container mt-5">
     <Router>
       <NavRouter/>
       
       <Routes>
-      <Route path="/" exact='true' element={<Tasks />}></Route>
-      <Route path="/edit/:id" exact='true' element={<EditTask/>}>
+      <Route exact='true' path="/" element={<Tasks />}></Route>
+      <Route exact='true' path="/edit/:id" element={<EditTask/>}>
       </Route>
-      <Route path="/Folders/:id" exact='true' element={<FolderWithTasks />}></Route>
+      <Route exact='true' path="/Folders/:id" element={<FolderWithTasks />}></Route>
       <Route path="/Folders" element={<Folders />}></Route>
      
             
       </Routes>
     </Router>
+    </div>
   );
 }
 

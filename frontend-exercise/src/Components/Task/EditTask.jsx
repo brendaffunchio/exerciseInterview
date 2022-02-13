@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect,Fragment,UseState} from 'react';
 import{
     BrowserRouter as Router,
     Switch,
@@ -8,13 +8,17 @@ import{
   
   } from 'react-router-dom';
   import { useParams } from 'react-router-dom';
+  
 
 const EditTask =()=>{
 
     const {id} = useParams()
     const[task,setTask]= React.useState([])
+    const [editTask, setEditTask]= React.useState({
+       description:""
+    })
 
-    console.log(id);
+  
 
 React.useEffect(()=>{
 
@@ -30,11 +34,59 @@ const getTask = async ()=>{
    setTask(dataTask)
   
 }
+
+const handleInputChange =(event)=>{
+
+   setEditTask({
+       ...editTask,
+       [event.target.name]: event.target.value
+   })
+console.log("hola");
+}
+
+const sendData = async (event) =>{
+
+event.preventDefault();
+const body = { description };
+console.log(body)
+await fetch(`http://localhost:8080/task/edit`, {
+               method: 'PUT',
+              headers: { "Content-type": "application/json" },
+               body: JSON.stringify(body)
+           });
+
+           event.target.reset();
+
+   }
 return (
    
 <div>
-   <h3>{task.description}</h3>
+   <span>Editing task "{task.description}"</span>
+
+<Fragment>
+
+<form className="row" onSubmit={sendData}>
+
+    <div className='col-md-3'>
+     <input
+         placeholder={task.description}
+         className="form-control"
+         type="text"
+         name="description"
+         onChange={handleInputChange}
+            /> 
+    </div>
+    <div className='col-md-3'>
+   <button type="submit" onClick={sendData}>Save</button>
+    </div>
+    <div className='col-md-3'>
+     <Link to="/" class="btn">Cancel</Link>
+    </div>
+</form>
+
+</Fragment>
 </div>
+
 )
 
 }
