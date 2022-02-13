@@ -50,11 +50,11 @@ const handleInputChange =(event)=>{
 const sendData = async (event) =>{
 
 event.preventDefault();
-const body = { description };
+const body = { event };
             const response = await fetch(`http://localhost:8080/task/create?id_folder=${id}`, {
                 method: 'POST',
                headers: { "Content-type": "application/json" },
-                body: JSON.stringify(body)
+                body: JSON.stringify(event)
             });
 
             event.target.reset();

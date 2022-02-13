@@ -7,6 +7,7 @@ import{
     Link
   
   } from "react-router-dom";
+  import axios from 'axios';
 
 const Folders =()=>{
 
@@ -15,18 +16,26 @@ const Folders =()=>{
         name:''
     });
 
+    const {name} = newFolder;
 React.useEffect(()=>{
 
 getFolders()
 
 },[])
+
 async function remove(id){
+
 const folderId= id;
-  await fetch(`http://localhost:8080/folder/delete?id=${folderId}`,{
-    method: 'DELETE'
-  })
+
+await axios({
+    method: 'delete', 
+    url: `http://localhost:8080/folder/delete?id=${folderId}`
+      
+});
  
 }
+
+
 
 const getFolders = async ()=>{
    const data = await fetch('http://localhost:8080/folder/getAll')
@@ -45,14 +54,21 @@ const handleInputChange =(event)=>{
 const sendData =async (event) =>{
 
 event.preventDefault();
-
-        const response = await fetch('http://localhost:8080/folder/create', {
-            method: "POST",
-            headers: { "Content-type": "application/json" },
-            body: JSON.stringify(body)
-        });
-
+const body = { event };
+   
+      await axios({
+            method: 'post', 
+            url: 'http://localhost:8080/folder/create',
+            data: {event},
+            headers: { 
+             'Content-Type': 'application/json',
+            'Accept': 'application/json'
+            },
+            data: JSON.stringify(body)
+        })
+   
 }
+
 
 return (
 <div class="m-3">
@@ -86,7 +102,7 @@ return (
          className="form-control"
          type="text"
          name="name"
-         onChange={handleInputChange}
+         onChange={event=>handleInputChange(event)}
              /> 
 
     </div>

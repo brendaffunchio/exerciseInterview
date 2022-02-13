@@ -8,7 +8,7 @@ import{
   
   } from 'react-router-dom';
   import { useParams } from 'react-router-dom';
-  
+  import axios from 'axios';
 
 const EditTask =()=>{
 
@@ -18,7 +18,7 @@ const EditTask =()=>{
        description:""
     })
 
-  
+  const {description} = editTask;
 
 React.useEffect(()=>{
 
@@ -41,21 +41,27 @@ const handleInputChange =(event)=>{
        ...editTask,
        [event.target.name]: event.target.value
    })
-console.log("hola");
+
 }
 
 const sendData = async (event) =>{
 
 event.preventDefault();
-const body = { description };
-console.log(body)
-await fetch(`http://localhost:8080/task/edit`, {
-               method: 'PUT',
-              headers: { "Content-type": "application/json" },
-               body: JSON.stringify(body)
-           });
+const body = {description};
 
-           event.target.reset();
+
+           await axios({
+            method: 'post', 
+            url: 'http://localhost:8080/task/edit',
+            data: {event},
+            headers: { 
+             'Content-Type': 'application/json',
+            'Accept': 'application/json'
+            },
+            data: JSON.stringify(body)
+        })
+   
+        
 
    }
 return (
@@ -73,7 +79,7 @@ return (
          className="form-control"
          type="text"
          name="description"
-         onChange={handleInputChange}
+         onChange={event=>handleInputChange(event)}
             /> 
     </div>
     <div className='col-md-3'>
