@@ -24,7 +24,7 @@ getTask();
 
 const getTask = async ()=>{
     
-   const data = await fetch(`http://localhost:8080/task/get?${id}`);
+   const data = await fetch(`http://localhost:8080/task/get?id=${id}`);
   
    const dataTask= await data.json();
    setTask(dataTask)

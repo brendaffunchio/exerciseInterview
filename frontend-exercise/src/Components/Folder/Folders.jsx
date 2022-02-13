@@ -29,14 +29,14 @@ return (
     <ul>
         {
             folders.map(item =>(
-                <li key={item.id}>
+                <p key={item.id}>
                     {item.name}
                     <Link to={`/Folders/${item.id}`} class="m-3">
                     View items
                     </Link> Remove
                    
                  
-                    </li>
+                    </p>
             ))
         }
     </ul>
